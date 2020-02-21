@@ -23,6 +23,10 @@ namespace FirstBankOfSuncoast
       AccountNumberCounter++;
     }
 
+    public void CloseAccount(int accountNum)
+    {
+      Accounts.RemoveAll(a => a.AccountNumber == accountNum);
+    }
     public void ShowAccounts()
     {
       foreach (var a in Accounts)
@@ -39,11 +43,60 @@ namespace FirstBankOfSuncoast
       Accounts.First(account => account.AccountNumber == accountNumber).Balance += amountToAdd;
     }
 
+
+    // Withdraw
+    public void Withdraw()
+    {
+      Console.WriteLine("Which account would you like to withdraw from?");
+      ShowAccounts();
+      int accountToWithdraw;
+      int.TryParse(Console.ReadLine(), out accountToWithdraw);
+
+      while (!Accounts.Any(a => a.AccountNumber == accountToWithdraw))
+      {
+        Console.WriteLine("errorMessage");
+        int.TryParse(Console.ReadLine(), out accountToWithdraw);
+
+      }
+
+      // How much to withdraw
+      Console.WriteLine("How much would you like to withdraw into the account?");
+      double amountToWithdraw;
+      double.TryParse(Console.ReadLine(), out amountToWithdraw);
+
+      while (amountToWithdraw > Accounts.First(a => a.AccountNumber == accountToWithdraw).Balance || amountToWithdraw <= 0)
+      {
+        Console.WriteLine("errorMessage");
+        double.TryParse(Console.ReadLine(), out amountToWithdraw);
+      }
+
+      Accounts.First(account => account.AccountNumber == accountToWithdraw).Balance -= amountToWithdraw;
+    }
+
+    public void Withdraw(int accountNumber)
+    {
+
+
+      // How much to withdraw
+      Console.WriteLine("How much would you like to withdraw into the account?");
+      double amountToWithdraw;
+      double.TryParse(Console.ReadLine(), out amountToWithdraw);
+
+      while (amountToWithdraw > Accounts.First(a => a.AccountNumber == accountNumber).Balance || amountToWithdraw <= 0)
+      {
+        Console.WriteLine("errorMessage");
+        double.TryParse(Console.ReadLine(), out amountToWithdraw);
+      }
+
+      Accounts.First(account => account.AccountNumber == accountNumber).Balance -= amountToWithdraw;
+    }
+
     public void Withdraw(int accountNumber, double amountToSubtract)
     {
       Accounts.First(account => account.AccountNumber == accountNumber).Balance -= amountToSubtract;
     }
 
+    
     public void Transfer(int accountToTransferFrom, int accountToTransferTo, double amountToTransfer)
     {
       Withdraw(accountToTransferFrom, amountToTransfer);
