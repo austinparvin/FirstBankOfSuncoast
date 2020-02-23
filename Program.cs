@@ -18,47 +18,18 @@ namespace FirstBankOfSuncoast
         static void Main(string[] args)
         {
             var bank = new Bank();
-
-            // var reader = new StreamReader("bank.csv");
-            // var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
-            bank = JsonConvert.DeserializeObject<Bank>(File.ReadAllText(@"bank.txt"));
-
-
-            var isRunning = true;
-            var errorMessage = "Sorry, that is not a valid input. Try Again.";
             var currentUser = new User();
 
-            // // TEST USER
-            // var testUser = new User();
-            // testUser.UserName = "austinparvin";
-            // testUser.Password = "password";
-            // testUser.AddAccount("checking", 100.00);
-            // testUser.AddAccount("savings", 200.00);
-            // bank.Users.Add(testUser);
+            //Populate bank with data from bank.txt
+            bank = JsonConvert.DeserializeObject<Bank>(File.ReadAllText(@"bank.txt"));
 
-            // var testUser2 = new User();
-            // testUser2.UserName = "tatkomrij";
-            // testUser2.Password = "banana";
-            // testUser2.AddAccount("checking", 5000.00);
-            // testUser2.AddAccount("savings", 2.00);
-            // bank.Users.Add(testUser2);
-
-
-            // Login
+            // error message
+            var errorMessage = "Sorry, that is not a valid input. Try Again.";
+            var isRunning = true;
             bool loggedIn = false;
-
-
-
-
-
-
-
 
             while (isRunning)
             {
-
-
-
                 // LOGIN
                 while (!loggedIn)
                 {
@@ -118,8 +89,10 @@ namespace FirstBankOfSuncoast
                     }
 
                 }
+
                 var userInput = "";
-                if ((currentUser.Accounts != null) && (!currentUser.Accounts.Any()))
+
+                if (!currentUser.Accounts.Any())
                 {
                     userInput = "u";
                 }
@@ -130,7 +103,6 @@ namespace FirstBankOfSuncoast
                     Console.WriteLine("(DEPOSIT 'd'), (WITHDRAW 'w'), (TRANSFER 't'), (QUIT 'q'), (USER SETTINGS 'u')");
                     userInput = Console.ReadLine().ToLower();
                 }
-
 
                 switch (userInput)
                 {
@@ -217,8 +189,6 @@ namespace FirstBankOfSuncoast
                         currentUser.Transfer(accountToTransferFrom, accountToTransferTo, amountToTransfer);
                         SaveBankData(bank);
                         break;
-
-
 
                     /////////////////////////////// USER SETTINGS ////////////////////////////////////
                     case "u":
