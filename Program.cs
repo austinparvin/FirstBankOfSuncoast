@@ -46,30 +46,7 @@ namespace FirstBankOfSuncoast
 
             // Login
             bool loggedIn = false;
-            while (!loggedIn)
-            {
-                // UserName
-                System.Console.WriteLine("Please enter your username");
-                var userName = Console.ReadLine().ToLower();
-                while (!bank.Users.Any(u => u.UserName == userName))
-                {
-                    Console.WriteLine("User not found. Try again.");
-                    userName = Console.ReadLine().ToLower();
-                };
 
-                // Password
-                System.Console.WriteLine("Please enter your password");
-                var password = Console.ReadLine();
-                while (password != bank.Users.First(u => u.UserName == userName).Password)
-                {
-                    Console.WriteLine("Password incorrect. Try again.");
-                    password = Console.ReadLine().ToLower();
-                };
-
-                // Set Current User
-                currentUser = bank.Users.First(u => u.UserName == userName);
-                loggedIn = true;
-            }
 
 
 
@@ -79,10 +56,81 @@ namespace FirstBankOfSuncoast
 
             while (isRunning)
             {
-                currentUser.ShowAccounts();
-                Console.WriteLine("What would you like to do?");
-                Console.WriteLine("(DEPOSIT 'd'), (WITHDRAW 'w'), (TRANSFER 't'), (QUIT 'q'), (USER SETTINGS 'u')");
-                var userInput = Console.ReadLine().ToLower();
+
+
+
+                // LOGIN
+                while (!loggedIn)
+                {
+                    System.Console.WriteLine("Greetings, would you like to (LOGIN 'l') or (SIGN UP 's')?");
+                    // Get user input
+                    var userAnswer = Console.ReadLine().ToLower();
+
+                    // validate
+                    while (userAnswer != "l" && userAnswer != "s")
+                    {
+                        System.Console.WriteLine(errorMessage);
+                        userAnswer = Console.ReadLine().ToLower();
+                    }
+
+                    if (userAnswer == "l")
+                    {
+
+                        // UserName
+                        System.Console.WriteLine("Please enter your username");
+                        var userName = Console.ReadLine().ToLower();
+                        while (!bank.Users.Any(u => u.UserName == userName))
+                        {
+                            Console.WriteLine("User not found. Try again.");
+                            userName = Console.ReadLine().ToLower();
+                        };
+
+                        // Password
+                        System.Console.WriteLine("Please enter your password");
+                        var password = Console.ReadLine();
+                        while (password != bank.Users.First(u => u.UserName == userName).Password)
+                        {
+                            Console.WriteLine("Password incorrect. Try again.");
+                            password = Console.ReadLine().ToLower();
+                        };
+
+                        // Set Current User
+                        currentUser = bank.Users.First(u => u.UserName == userName);
+                        loggedIn = true;
+                    }
+                    else if (userAnswer == "s")
+                    {
+                        // UserName
+                        System.Console.WriteLine("Please enter your username");
+                        var userName = Console.ReadLine().ToLower();
+                        while (bank.Users.Any(u => u.UserName == userName))
+                        {
+                            Console.WriteLine("Username is taken. Try again.");
+                            userName = Console.ReadLine().ToLower();
+                        };
+
+                        // Password
+                        System.Console.WriteLine("Please enter your password");
+                        var password = Console.ReadLine();
+
+                        bank.CreateUser(userName, password);
+                        SaveBankData(bank);
+                    }
+
+                }
+                var userInput = "";
+                if ((currentUser.Accounts != null) && (!currentUser.Accounts.Any()))
+                {
+                    userInput = "u";
+                }
+                else
+                {
+                    currentUser.ShowAccounts();
+                    Console.WriteLine("What would you like to do?");
+                    Console.WriteLine("(DEPOSIT 'd'), (WITHDRAW 'w'), (TRANSFER 't'), (QUIT 'q'), (USER SETTINGS 'u')");
+                    userInput = Console.ReadLine().ToLower();
+                }
+
 
                 switch (userInput)
                 {
@@ -115,6 +163,7 @@ namespace FirstBankOfSuncoast
 
 
                         currentUser.Deposit(accountToDeposit, amountToDeposit);
+                        SaveBankData(bank);
                         break;
 
                     /////////////////////////////// Withdraw ////////////////////////////////////
@@ -122,6 +171,7 @@ namespace FirstBankOfSuncoast
 
                         // Which account to withdraw from
                         currentUser.Withdraw();
+                        SaveBankData(bank);
                         break;
 
                     /////////////////////////////// TRANSFER ////////////////////////////////////
@@ -165,15 +215,25 @@ namespace FirstBankOfSuncoast
                             double.TryParse(Console.ReadLine(), out amountToTransfer);
                         }
                         currentUser.Transfer(accountToTransferFrom, accountToTransferTo, amountToTransfer);
+                        SaveBankData(bank);
                         break;
 
 
 
                     /////////////////////////////// USER SETTINGS ////////////////////////////////////
                     case "u":
-                        Console.WriteLine("What would you like to do?");
-                        Console.WriteLine("(ADD ACCOUNT 'a'), (CLOSE ACCOUNT 'c'), (CHANGE PASSWORD 'p')");
-                        userInput = Console.ReadLine().ToLower();
+
+                        if ((currentUser.Accounts != null) && (!currentUser.Accounts.Any()))
+                        {
+                            userInput = "a";
+                        }
+                        else
+                        {
+                            Console.WriteLine("What would you like to do?");
+                            Console.WriteLine("(ADD ACCOUNT 'a'), (CLOSE ACCOUNT 'c'), (CHANGE PASSWORD 'p')");
+                            userInput = Console.ReadLine().ToLower();
+                        }
+
                         switch (userInput)
                         {
 
@@ -211,6 +271,7 @@ namespace FirstBankOfSuncoast
 
 
                                 currentUser.AddAccount(accountType, openDepositAmount);
+                                SaveBankData(bank);
                                 break;
 
                             // CLOSING ACCOUNTS
@@ -257,13 +318,13 @@ namespace FirstBankOfSuncoast
                                     System.Console.WriteLine("Exited closing account");
                                 }
 
-
+                                SaveBankData(bank);
                                 break;
                             case "p":
                                 System.Console.WriteLine("Please enter your new password");
                                 var newPassword = Console.ReadLine();
                                 currentUser.Password = newPassword;
-
+                                SaveBankData(bank);
                                 break;
                         }
                         break;
