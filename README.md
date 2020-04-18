@@ -9,8 +9,8 @@ This will save your information in a txt file in JSON so you can track your acco
 - [C#](https://docs.microsoft.com/en-us/dotnet/csharp/)
 - [LINQ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/)
 - [JSON](https://www.json.org/json-en.html)
-- Persistante data
-- MVC design pattern
+- [PERSISTANT DATA](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/serialization/walkthrough-persisting-an-object-in-visual-studio)
+- [MVC](https://dotnet.microsoft.com/apps/aspnet/mvc)
 
 # Featured Code
 ## Method Used To Save Data To bank.txt
