@@ -4,7 +4,7 @@ A console app that will let you track a savings and a checking account total by 
 
 This will save your information in a txt file in JSON so you can track your account totals over time, automatically.
 
-This application includes:
+## Includes:
 
 - [C#](https://docs.microsoft.com/en-us/dotnet/csharp/)
 - [LINQ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/)
@@ -12,6 +12,8 @@ This application includes:
 - Persistante data
 - MVC design pattern
 
+# Featured Code
+## Method Used To Save Data To bank.txt
 ```C#
 static void SaveBankData(Bank bank)
         {
